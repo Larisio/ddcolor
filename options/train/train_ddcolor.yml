@@ -42,7 +42,7 @@ datasets:
     type: LabDataset
     # dataroot_gt: path_to_gt
     dataroot_gt: /
-    meta_info_file: '/home/lkmm73/dcolor/data_list/val.txt'
+    meta_info_file: '/home/lkmm73/ddcolor/data_list/val.txt'
     gt_size: 256
     io_backend:
       type: disk
