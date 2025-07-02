@@ -1,0 +1,2 @@
+/home/lkmm73/DDColor/data_list/dataset/val/4.jpg
+/home/lkmm73/DDColor/data_list/dataset/val/5.jpg

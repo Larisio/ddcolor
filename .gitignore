@@ -135,6 +135,6 @@ venv.bak/
 .mypy_cache/
 
 # meta file
-data_list/*.txt
+# data_list/*.txt
 
 weights/

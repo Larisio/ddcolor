@@ -1,0 +1,3 @@
+/home/lkmm73/DDColor/data_list/dataset/train/10.jpg
+/home/lkmm73/DDColor/data_list/dataset/train/4.jpg
+/home/lkmm73/DDColor/data_list/dataset/train/3.jpg
