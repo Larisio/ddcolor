@@ -1,5 +1,5 @@
 # ignored folders
-# datasets/*
+datasets/*
 assets/*
 experiments/*
 results/*
@@ -19,9 +19,9 @@ version.py
 
 # ignored files with suffix
 *.html
-# *.png
-# *.jpeg
-# *.jpg
+*.png
+*.jpeg
+*.jpg
 *.gif
 *.pth
 *.zip
