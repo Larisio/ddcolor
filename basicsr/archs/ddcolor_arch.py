@@ -169,13 +169,13 @@ class Encoder(nn.Module):
     
     def load_pretrain_model(self):
         if self.encoder_name == 'convnext-t' or self.encoder_name == 'convnext':
-            self.load('pretrain/convnext_tiny_22k_224.pth')
+            self.load('/home/lkmm73/ddcolor/pretrain/convnext_tiny_22k_224.pth')
         elif self.encoder_name == 'convnext-s':
-            self.load('pretrain/convnext_small_22k_224.pth')
+            self.load('/home/lkmm73/ddcolor/pretrain/convnext_small_22k_224.pth')
         elif self.encoder_name == 'convnext-b':
-            self.load('pretrain/convnext_base_22k_224.pth')
+            self.load('/home/lkmm73/ddcolor/pretrain/convnext_base_22k_224.pth')
         elif self.encoder_name == 'convnext-l':
-            self.load('pretrain/convnext_large_22k_224.pth')
+            self.load('/home/lkmm73/ddcolor/pretrain/convnext_large_22k_224.pth')
         else:
             raise NotImplementedError
         print('Loaded pretrained convnext model.')
