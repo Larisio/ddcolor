@@ -1,5 +1,5 @@
 # general settings
-name: train_ddcolor_10k
+name: train_ddcolor_moder_comic_10k
 pull_paths: ['I:\dataset\images.tar.gz\images'] # , 'I:\dataset\raw_panel_images_64'
 img_types: ['jpg', 'jpeg', 'png']
 
@@ -8,6 +8,7 @@ max_images: 10000
 split_ratio: 0.8
 
 store_path: I:/dataset/
+txt_path_prefix: '/home/lkmm73/ddcolor/data_list/'
 
 image:
   filter:

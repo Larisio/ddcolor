@@ -197,6 +197,8 @@ def load_and_store_images(
         path_list,
         output_dir,
         max_images,
+        txt_path_prefix,
+
         #filter
         max_img_size,
         min_img_size,
@@ -274,8 +276,8 @@ def load_and_store_images(
                 print(f"[Warning] Skipping image due to brightness: {path}")
             continue
 
-        new_filename = f"{prefix}_{idx:04d}_{image_name}.jpg"
-        save_path = os.path.join(output_dir, new_filename)
+        new_filename = f"{prefix}_{img_counter:04d}_{image_name}.jpg"
+        save_path = os.path.join(txt_path_prefix, new_filename)
         
         cv2.imwrite(save_path, img)
         saved_paths.append(save_path)
@@ -283,7 +285,7 @@ def load_and_store_images(
         img_counter += 1
 
         if verbose:
-            print(f"[OK] Saved: {save_path}")
+            print(f"[OK][{img_counter}] Saved: {save_path}")
         
         
     for path in touched_paths:
@@ -311,11 +313,13 @@ if __name__ == '__main__':
 
     dataset_store_path = opt['store_path']
     dataset_name = opt['name']
-    
+
     train_path = os.path.join(dataset_store_path, dataset_name, 'train')
     val_path = os.path.join(dataset_store_path, dataset_name, 'val')
     train_txt_path = os.path.join(dataset_store_path, dataset_name, 'train.txt')
     val_txt_path = os.path.join(dataset_store_path, dataset_name, 'val.txt')
+
+    txt_path_prefix = opt['txt_path_prefix']
 
     image_opt = opt['image']
     filter_opt = image_opt['filter']
@@ -323,6 +327,7 @@ if __name__ == '__main__':
             img_paths,
             train_path,
             max_train_images,
+            os.path.join(txt_path_prefix, 'train/'),
             #filter
             filter_opt['max_img_size'],
             filter_opt['min_img_size'],
@@ -348,6 +353,7 @@ if __name__ == '__main__':
             img_paths,
             val_path,
             max_val_images,
+            os.path.join(txt_path_prefix, 'val/'),
             #filter
             filter_opt['max_img_size'],
             filter_opt['min_img_size'],
