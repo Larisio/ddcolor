@@ -16,7 +16,7 @@ image:
     min_img_size: 256
     max_black_percentage: 0.4
     black_threshold: 60
-    max_white_percentage: 0.4
+    max_white_percentage: 0.6
     white_threshold: 200
 
   horizontal_cut: true

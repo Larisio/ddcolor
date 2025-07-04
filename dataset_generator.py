@@ -236,7 +236,7 @@ def load_and_store_images(
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    saved_paths = []
+    txt_paths = []
     touched_paths = []
     img_counter = 1
     for idx, path in enumerate(path_list):
@@ -277,10 +277,11 @@ def load_and_store_images(
             continue
 
         new_filename = f"{prefix}_{img_counter:04d}_{image_name}.jpg"
-        save_path = os.path.join(txt_path_prefix, new_filename)
-        
+        save_path = os.path.join(output_dir, new_filename)
+        txt_path = os.path.join(txt_path_prefix, new_filename)
+
         cv2.imwrite(save_path, img)
-        saved_paths.append(save_path)
+        txt_paths.append(txt_path)
         touched_paths.append(path)
         img_counter += 1
 
@@ -291,7 +292,7 @@ def load_and_store_images(
     for path in touched_paths:
         path_list.remove(path)
 
-    return saved_paths
+    return txt_paths
 
 
 
