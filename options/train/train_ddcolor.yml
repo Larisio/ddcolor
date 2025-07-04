@@ -110,7 +110,7 @@ train:
 
   scheduler:
     type: MultiStepLR
-    milestones: [80000, 120000, 160000, 200000, 240000, 280000, 320000, 360000]
+    milestones: [40000, 80000, 100000] # [80000, 120000, 160000, 200000, 240000, 280000, 320000, 360000]
     gamma: 0.5
 
   total_iter: 120000
@@ -148,7 +148,7 @@ train:
 # Uncomment these for validation
 # validation settings
 val:
-  val_freq: !!float 1e4
+  val_freq: 10000 # !!float 1e4
   save_img: False
   pbar: True
 
@@ -169,7 +169,7 @@ logger:
   print_freq: 100
   save_snapshot_freq: 10000  # !!float 1e4
   save_snapshot_verbose: True
-  save_checkpoint_freq: !!float 1e4
+  save_checkpoint_freq: 10000 # !!float 1e4
   use_tb_logger: true
   wandb:
     project: ~
