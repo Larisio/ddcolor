@@ -47,6 +47,11 @@ class LabDataset(data.Dataset):
         self.cutmix_params = {'alpha':1.}
         self.cutmix_p = opt['cutmix_p']
 
+        self.threshold_replace = opt.get('threshold_replace', 255)
+        self.threshold = opt.get('threshold', 175)
+        self.brightness_factor = opt.get('brightness_factor', 1.8)
+        self.outline_thickness = opt.get('outline_thickness', 1)
+
 
     def __getitem__(self, index):
         if self.file_client is None:
@@ -105,17 +110,12 @@ class LabDataset(data.Dataset):
 
         # ----------------------------- Get gray lq, to tentor ----------------------------- #
         # convert to gray
-        threshold_replace = 255
-        threshold = 175
-        brightness_factor = 1.8
-        outline_thickness = 1
-
         img_gt = cv2.cvtColor(img_gt, cv2.COLOR_BGR2RGB)
         img_l, img_ab = rgb2lab(img_gt)
-        img_l = brighten_lab_l(img_l, factor=brightness_factor)
+        img_l = brighten_lab_l(img_l, factor=self.brightness_factor)
         img_l_cv2 = lab_l_to_uint8(img_l)
 
-        img_l_cv2 = outline_img(img_l_cv2, threshold=threshold, threshold_replace=threshold_replace, thickness=outline_thickness)
+        img_l_cv2 = outline_img(img_l_cv2, threshold=self.threshold, threshold_replace=self.threshold_replace, thickness=self.outline_thickness)
 
         img_l = uint8_to_lab_l(img_l_cv2)
 

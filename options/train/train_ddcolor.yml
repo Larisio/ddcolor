@@ -29,6 +29,12 @@ datasets:
     do_fmix: False
     fmix_p: 0.5
 
+    # outlining
+    threshold_replace: 255
+    threshold: 175
+    brightness_factor: 1.8
+    outline_thickness: 1
+
     # data loader
     use_shuffle: true
     num_worker_per_gpu: 8
