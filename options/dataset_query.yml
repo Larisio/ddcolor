@@ -4,7 +4,7 @@ pull_paths: ['I:\dataset\images.tar.gz\images'] # , 'I:\dataset\raw_panel_images
 img_types: ['jpg', 'jpeg', 'png']
 
 deep_pull: true
-max_images: 10000
+max_images: 8000
 split_ratio: 0.8
 
 store_path: I:/dataset/
