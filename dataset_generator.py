@@ -291,6 +291,8 @@ def load_and_store_images(
 
     return saved_paths
 
+
+
 if __name__ == '__main__':
     # Open and load the YAML file
     with open('options/dataset_query.yml', 'r') as file:
@@ -307,11 +309,19 @@ if __name__ == '__main__':
     max_train_images = max_images * opt['split_ratio']
     max_val_images = max_images - max_train_images
 
+    dataset_store_path = opt['store_path']
+    dataset_name = opt['name']
+    
+    train_path = os.path.join(dataset_store_path, dataset_name, 'train')
+    val_path = os.path.join(dataset_store_path, dataset_name, 'val')
+    train_txt_path = os.path.join(dataset_store_path, dataset_name, 'train.txt')
+    val_txt_path = os.path.join(dataset_store_path, dataset_name, 'val.txt')
+
     image_opt = opt['image']
     filter_opt = image_opt['filter']
     train_txt_file = load_and_store_images(
             img_paths,
-            opt['train_path'],
+            train_path,
             max_train_images,
             #filter
             filter_opt['max_img_size'],
@@ -336,7 +346,7 @@ if __name__ == '__main__':
     
     val_txt_file = load_and_store_images(
             img_paths,
-            opt['val_path'],
+            val_path,
             max_val_images,
             #filter
             filter_opt['max_img_size'],
@@ -359,9 +369,6 @@ if __name__ == '__main__':
             verbose=True
         )
     
-    train_txt_path = opt['train_txt_path']
-    val_txt_path = opt['val_txt_path']
-
     os.makedirs(os.path.dirname(train_txt_path), exist_ok=True)
     os.makedirs(os.path.dirname(val_txt_path), exist_ok=True)
 
