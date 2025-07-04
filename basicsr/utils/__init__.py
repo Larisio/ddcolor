@@ -14,6 +14,11 @@ __all__ = [
     'imfrombytes',
     'imwrite',
     'crop_border',
+    'outline_img',
+    'brighten_uint8',
+    'lab_l_to_uint8',
+    'brighten_lab_l',
+    'uint8_to_lab_l',
     # logger.py
     'MessageLogger',
     'AvgTimer',

@@ -253,3 +253,43 @@ def tensor_from_contours(lq_tensor):
         contour_images.append(contour_tensor)
 
     return torch.stack(contour_images)
+
+
+# Convert Lab-L channel to uint8 for OpenCV display
+def lab_l_to_uint8(img_l):
+    """Convert Lab L channel [0, 100] float64 -> uint8 [0, 255]"""
+    img_l_gray = img_l[:, :, 0]  # shape (H, W)
+    img_l_uint8 = (img_l_gray / 100.0 * 255).astype(np.uint8)
+    return img_l_uint8
+
+# Convert displayed uint8 L channel back to Lab format
+def uint8_to_lab_l(img_l_uint8):
+    """Convert uint8 [0, 255] -> Lab L channel float64 [0, 100], shape (H, W, 1)"""
+    img_l_gray = (img_l_uint8.astype(np.float64) / 255.0) * 100.0
+    return img_l_gray[:, :, np.newaxis]  # shape (H, W, 1)
+
+def brighten_lab_l(img_l, factor=1.2):
+    """Brighten L channel by scaling. Values clipped to [0, 100]."""
+    img_l_bright = img_l * factor
+    img_l_bright = np.clip(img_l_bright, 0, 100)
+    return img_l_bright
+
+def brighten_rgb(img_rgb, factor=1.2):
+    """Brighten RGB float32 image. Values clipped to [0, 1]."""
+    img_bright = img_rgb * factor
+    img_bright = np.clip(img_bright, 0.0, 1.0)
+    return img_bright
+
+def brighten_uint8(img, amount=30):
+    """Add brightness to uint8 image. Clipped to [0, 255]."""
+    img_bright = cv2.add(img, np.full_like(img, amount))
+    return img_bright
+
+def outline_img(img_l_cv2, threshold=127, threshold_replace=255, thickness=1):
+    _, img_l_cv2 = cv2.threshold(img_l_cv2, threshold, threshold_replace, cv2.THRESH_BINARY)
+    _, thresh = cv2.threshold(img_l_cv2, 127, 255, 0)
+
+    contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(img_l_cv2, contours, -1, 0, thickness=thickness)
+
+    return img_l_cv2

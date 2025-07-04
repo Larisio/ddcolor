@@ -6,7 +6,8 @@ import torch
 from torch.utils import data as data
 
 from basicsr.data.transforms import rgb2lab
-from basicsr.utils import FileClient, get_root_logger, imfrombytes, img2tensor
+from basicsr.utils import FileClient, get_root_logger, imfrombytes, img2tensor 
+from basicsr.utils import outline_img, brighten_uint8, lab_l_to_uint8, brighten_lab_l, uint8_to_lab_l
 from basicsr.utils.registry import DATASET_REGISTRY
 from basicsr.data.fmix import sample_mask
 
@@ -73,7 +74,6 @@ class LabDataset(data.Dataset):
                 retry -= 1
         img_gt = imfrombytes(img_bytes, float32=True)
         img_gt = cv2.resize(img_gt, (gt_size, gt_size))  # TODO: 直接resize是否是最佳方案？
-        
         # -------------------------------- (Optional) CutMix & FMix -------------------------------- #
         if self.do_fmix and np.random.uniform(0., 1., size=1)[0] > self.fmix_p:
             with torch.no_grad():
@@ -105,8 +105,19 @@ class LabDataset(data.Dataset):
 
         # ----------------------------- Get gray lq, to tentor ----------------------------- #
         # convert to gray
+        threshold_replace = 255
+        threshold = 175
+        brightness_factor = 1.8
+        outline_thickness = 1
+
         img_gt = cv2.cvtColor(img_gt, cv2.COLOR_BGR2RGB)
         img_l, img_ab = rgb2lab(img_gt)
+        img_l = brighten_lab_l(img_l, factor=brightness_factor)
+        img_l_cv2 = lab_l_to_uint8(img_l)
+
+        img_l_cv2 = outline_img(img_l_cv2, threshold=threshold, threshold_replace=threshold_replace, thickness=outline_thickness)
+
+        img_l = uint8_to_lab_l(img_l_cv2)
 
         target_a, target_b = self.ab2int(img_ab)
 
