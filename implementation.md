@@ -11,6 +11,7 @@ python3.10 setup.py develop
 
 ### Download the pretrained weights for ConvNeXt and InceptionV3 and place them in the pretrain folder.
 ConvNeXt: https://dl.fbaipublicfiles.com/convnext/convnext_large_22k_224.pth
+
 Inception_v3: https://download.pytorch.org/models/inception_v3_google-1a9a5a14.pth
 
 
