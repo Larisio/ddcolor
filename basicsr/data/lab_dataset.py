@@ -47,10 +47,10 @@ class LabDataset(data.Dataset):
         self.cutmix_params = {'alpha':1.}
         self.cutmix_p = opt['cutmix_p']
 
-        self.threshold_replace = opt.get('threshold_replace', 255)
-        self.threshold = opt.get('threshold', 175)
-        self.brightness_factor = opt.get('brightness_factor', 1.8)
-        self.outline_thickness = opt.get('outline_thickness', 1)
+        self.threshold_replace = opt['threshold_replace']
+        self.threshold = opt['threshold']
+        self.brightness_factor = opt['brightness_factor']
+        self.outline_thickness = opt['outline_thickness']
 
 
     def __getitem__(self, index):
