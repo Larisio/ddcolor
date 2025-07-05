@@ -198,6 +198,7 @@ def load_and_store_images(
         output_dir,
         max_images,
         txt_path_prefix,
+        print_steps,
 
         #filter
         max_img_size,
@@ -291,6 +292,12 @@ def load_and_store_images(
         img_counter += 1
 
         if verbose:
+            if idx % 100 == 0:
+                print(f"----------------------------------------------------------------------------------")
+                print(f"[Path left: {len(path_list) - idx}][idx: {idx}][path_list: {len(path_list)}] ")
+                print(f"----------------------------------------------------------------------------------")
+
+        if verbose:
             print(f"[OK][{img_counter}] Saved: {save_path}")
         
         
@@ -334,6 +341,7 @@ if __name__ == '__main__':
             train_path,
             max_train_images,
             os.path.join(txt_path_prefix, 'train/'),
+            opt['print_steps'],
             #filter
             filter_opt['max_img_size'],
             filter_opt['min_img_size'],
@@ -355,6 +363,11 @@ if __name__ == '__main__':
             verbose=True
             )
     
+    os.makedirs(os.path.dirname(train_txt_path), exist_ok=True)
+    with open(train_txt_path, 'w') as f:
+        for path in train_txt_file:
+            f.write(f"{path}\n")
+
     val_txt_file = load_and_store_images(
             img_paths,
             val_path,
@@ -381,13 +394,9 @@ if __name__ == '__main__':
             verbose=True
         )
     
-    os.makedirs(os.path.dirname(train_txt_path), exist_ok=True)
+    
     os.makedirs(os.path.dirname(val_txt_path), exist_ok=True)
 
-    with open(train_txt_path, 'w') as f:
-        for path in train_txt_file:
-            f.write(f"{path}\n")
-    
     with open(val_txt_path, 'w') as f:
         for path in val_txt_file:
             f.write(f"{path}\n")
