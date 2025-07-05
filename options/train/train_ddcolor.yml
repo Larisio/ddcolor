@@ -21,7 +21,7 @@ datasets:
     # augmentation config
     ## flip & rotate90
     use_hflip: True
-    use_rot: True
+    use_rot: False
 
     # cutmix / fmix
     do_cutmix: False
@@ -37,8 +37,8 @@ datasets:
 
     # data loader
     use_shuffle: true
-    num_worker_per_gpu: 8
-    batch_size_per_gpu: 8
+    num_worker_per_gpu: 4
+    batch_size_per_gpu: 4
     dataset_enlarge_ratio: 1
     prefetch_mode: ~
 
