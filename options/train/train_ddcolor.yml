@@ -16,7 +16,7 @@ datasets:
     io_backend:
       type: disk
 
-    gt_size: 512
+    gt_size: 256
 
     # augmentation config
     ## flip & rotate90
@@ -49,7 +49,7 @@ datasets:
     # dataroot_gt: path_to_gt
     dataroot_gt: /
     meta_info_file: '/home/lkmm73/ddcolor/data_list/val.txt'
-    gt_size: 512
+    gt_size: 256
     io_backend:
       type: disk
       
