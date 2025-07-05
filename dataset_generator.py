@@ -276,9 +276,9 @@ def load_and_store_images(
         if  brightness_check != 0:
             if verbose:
                 if brightness_check == -1:
-                    print(f"[Warning] Skipping image due to brightness: {path}")
+                    print(f"[Warning] Skipping image to dark: {path}")
                 elif brightness_check == 1:
-                    print(f"[Warning] Skipping image due to brightness: {path}")
+                    print(f"[Warning] Skipping image to brightness: {path}")
             continue
 
         new_filename = f"{prefix}_{img_counter:04d}_{image_name}.jpg"
