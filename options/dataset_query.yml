@@ -15,7 +15,7 @@ image:
     max_img_size: 4000
     min_img_size: 800
     max_black_percentage: 0.3
-    black_threshold: 70
+    black_threshold: 50
     max_white_percentage: 0.3
     white_threshold: 190
 
