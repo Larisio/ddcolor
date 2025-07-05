@@ -17,7 +17,7 @@ image:
     max_black_percentage: 0.3
     black_threshold: 70
     max_white_percentage: 0.3
-    white_threshold: 180
+    white_threshold: 190
 
   horizontal_cut: true
   horizontal_cut_size: 1024
