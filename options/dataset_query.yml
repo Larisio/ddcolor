@@ -1,10 +1,10 @@
 # general settings
-name: train_ddcolor_old_comic_10k
-pull_paths: ['I:\dataset\raw_panel_images_64'] # ['I:\dataset\images.tar.gz\images'] # , 'I:\dataset\raw_panel_images_64'
+name: train_ddcolor_old_comic_20k
+pull_paths: ['I:\dataset\images.tar.gz\images'] # ['I:\dataset\images.tar.gz\images', 'I:\dataset\raw_panel_images_64']
 img_types: ['jpg', 'jpeg', 'png']
 
 deep_pull: true
-max_images: 10000
+max_images: 20000
 split_ratio: 0.8
 
 store_path: I:/dataset/
@@ -13,18 +13,18 @@ txt_path_prefix: '/home/lkmm73/ddcolor/data_list/dataset/'
 image:
   filter:
     max_img_size: 4000
-    min_img_size: 256
-    max_black_percentage: 0.4
+    min_img_size: 800
+    max_black_percentage: 0.3
     black_threshold: 70
     max_white_percentage: 0.3
-    white_threshold: 200
+    white_threshold: 180
 
   horizontal_cut: true
-  horizontal_cut_size: 512
+  horizontal_cut_size: 1024
   horizontal_cut_direction: both #left, right, both
 
   vertical_cut: true
-  vertical_cut_size: 512
+  vertical_cut_size: 1024
   vertical_cut_direction: top #top, bottom, both
 
   resize: true
