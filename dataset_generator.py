@@ -271,9 +271,14 @@ def load_and_store_images(
         # Squeezing
         img = resize_image(img, resize=resize, resize_until=resize_until)
 
-        if filter_img_brightness(img, max_black_percentage, black_threshold, max_white_percentage, white_threshold) != 0:
+        # Brightness filter
+        brightness_check = filter_img_brightness(img, max_black_percentage, black_threshold, max_white_percentage, white_threshold)
+        if  brightness_check != 0:
             if verbose:
-                print(f"[Warning] Skipping image due to brightness: {path}")
+                if brightness_check == -1:
+                    print(f"[Warning] Skipping image due to brightness: {path}")
+                elif brightness_check == 1:
+                    print(f"[Warning] Skipping image due to brightness: {path}")
             continue
 
         new_filename = f"{prefix}_{img_counter:04d}_{image_name}.jpg"
