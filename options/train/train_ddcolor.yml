@@ -180,6 +180,6 @@ logger:
 dist_params:
   backend: nccl
   master_addr: 127.0.0.1
-  port: 3725
+  port: 3721
 
 find_unused_parameters: true
