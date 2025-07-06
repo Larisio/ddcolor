@@ -1,5 +1,5 @@
 # general settings
-name: train_ddcolor_l_run_moder_comic_20k
+name: train_ddcolor_l_run_modern_512_20k_noOutline_long
 model_type: ColorModel
 scale: 1
 num_gpu: 2
@@ -33,7 +33,7 @@ datasets:
     threshold_replace: 255
     threshold: 175
     brightness_factor: 1.7
-    outline_thickness: 1
+    outline_thickness: 0
 
     # data loader
     use_shuffle: true
@@ -63,7 +63,7 @@ datasets:
     threshold_replace: 255
     threshold: 175
     brightness_factor: 1.7
-    outline_thickness: 1
+    outline_thickness: 0
 
 # network structures
 network_g:
