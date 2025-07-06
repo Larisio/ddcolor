@@ -7,7 +7,7 @@ from torch.utils import data as data
 
 from basicsr.data.transforms import rgb2lab
 from basicsr.utils import FileClient, get_root_logger, imfrombytes, img2tensor 
-from basicsr.utils import outline_img, brighten_uint8, lab_l_to_uint8, brighten_lab_l, uint8_to_lab_l
+from basicsr.utils import outline_img, lab_l_to_uint8, brighten_lab_l, uint8_to_lab_l
 from basicsr.utils.registry import DATASET_REGISTRY
 from basicsr.data.fmix import sample_mask
 
