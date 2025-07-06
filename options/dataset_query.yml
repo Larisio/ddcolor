@@ -4,8 +4,8 @@ pull_paths: ['I:\dataset\images.tar.gz\images'] # ['I:\dataset\images.tar.gz\ima
 img_types: ['jpg', 'jpeg', 'png']
 
 deep_pull: true
-max_images: 20000
-split_ratio: 0.8
+max_images: 4000
+split_ratio: 1.0
 print_steps: 100
 
 store_path: I:/dataset/
