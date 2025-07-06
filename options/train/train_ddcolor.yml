@@ -16,7 +16,7 @@ datasets:
     io_backend:
       type: disk
 
-    gt_size: 256
+    gt_size: 512
 
     # augmentation config
     ## flip & rotate90
@@ -37,8 +37,8 @@ datasets:
 
     # data loader
     use_shuffle: true
-    num_worker_per_gpu: 8
-    batch_size_per_gpu: 4
+    num_worker_per_gpu: 2
+    batch_size_per_gpu: 1
     dataset_enlarge_ratio: 1
     prefetch_mode: ~
 
@@ -49,7 +49,7 @@ datasets:
     # dataroot_gt: path_to_gt
     dataroot_gt: /
     meta_info_file: '/home/lkmm73/ddcolor/data_list/val.txt'
-    gt_size: 256
+    gt_size: 512
     io_backend:
       type: disk
       
@@ -62,7 +62,7 @@ datasets:
     # outlining
     threshold_replace: 255
     threshold: 175
-    brightness_factor: 1.8
+    brightness_factor: 1.7
     outline_thickness: 1
 
 # network structures
@@ -166,10 +166,10 @@ val:
 
 # logging settings
 logger:
-  print_freq: 100
+  print_freq: 1000
   save_snapshot_freq: 10000  # !!float 1e4
   save_snapshot_verbose: True
-  save_checkpoint_freq: 20000 # !!float 1e4
+  save_checkpoint_freq: 30000 # !!float 1e4
   use_tb_logger: true
   wandb:
     project: ~

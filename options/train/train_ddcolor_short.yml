@@ -62,7 +62,7 @@ datasets:
     # outlining
     threshold_replace: 255
     threshold: 175
-    brightness_factor: 1.8
+    brightness_factor: 1.7
     outline_thickness: 0
 
 # network structures
