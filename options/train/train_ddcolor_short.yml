@@ -12,11 +12,11 @@ datasets:
     name: ImageNet
     type: LabDataset
     dataroot_gt: /
-    meta_info_file: ['/home/lkmm73/ddcolor/data_list/train.txt']
+    meta_info_file: ['/home/lkmm73/ddcolor/data_list/train_small.txt']
     io_backend:
       type: disk
 
-    gt_size: 256
+    gt_size: 512
 
     # augmentation config
     ## flip & rotate90
@@ -48,8 +48,8 @@ datasets:
     type: LabDataset
     # dataroot_gt: path_to_gt
     dataroot_gt: /
-    meta_info_file: '/home/lkmm73/ddcolor/data_list/val.txt'
-    gt_size: 256
+    meta_info_file: '/home/lkmm73/ddcolor/data_list/val_small.txt'
+    gt_size: 512
     io_backend:
       type: disk
       
@@ -110,7 +110,7 @@ train:
 
   scheduler:
     type: MultiStepLR
-    milestones: [20000, 40000, 60000, 80000, 100000] # [80000, 120000, 160000, 200000, 240000, 280000, 320000, 360000]
+    milestones: [2000, 4000, 6000, 8000] # [80000, 120000, 160000, 200000, 240000, 280000, 320000, 360000]
     gamma: 0.5
 
   total_iter: 10000
@@ -148,7 +148,7 @@ train:
 # Uncomment these for validation
 # validation settings
 val:
-  val_freq: 10000 # !!float 1e4
+  val_freq: 2000 # !!float 1e4
   save_img: False
   pbar: True
 
@@ -167,9 +167,9 @@ val:
 # logging settings
 logger:
   print_freq: 100
-  save_snapshot_freq: 10000  # !!float 1e4
+  save_snapshot_freq: 2000  # !!float 1e4
   save_snapshot_verbose: True
-  save_checkpoint_freq: 20000 # !!float 1e4
+  save_checkpoint_freq: 5000 # !!float 1e4
   use_tb_logger: true
   wandb:
     project: ~
