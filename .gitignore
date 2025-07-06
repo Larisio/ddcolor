@@ -6,6 +6,7 @@ results/*
 tb_logger/*
 wandb/*
 tmp/*
+notebooks/exports/*
 
 *.DS_Store
 .idea
