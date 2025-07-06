@@ -336,6 +336,7 @@ if __name__ == '__main__':
 
     image_opt = opt['image']
     filter_opt = image_opt['filter']
+
     train_txt_file = load_and_store_images(
             img_paths,
             train_path,
@@ -373,6 +374,7 @@ if __name__ == '__main__':
             val_path,
             max_val_images,
             os.path.join(txt_path_prefix, 'val/'),
+            opt['print_steps'],
             #filter
             filter_opt['max_img_size'],
             filter_opt['min_img_size'],
