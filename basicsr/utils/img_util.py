@@ -287,9 +287,12 @@ def brighten_uint8(img, amount=30):
 
 def outline_img(img_l_cv2, threshold=127, threshold_replace=255, thickness=1):
     _, img_l_cv2 = cv2.threshold(img_l_cv2, threshold, threshold_replace, cv2.THRESH_BINARY)
-    _, thresh = cv2.threshold(img_l_cv2, 127, 255, 0)
 
-    contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    if thickness <= 0:
+        # If thickness is 0, just return the binary image
+        return img_l_cv2
+    
+    contours, _ = cv2.findContours(img_l_cv2, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     cv2.drawContours(img_l_cv2, contours, -1, 0, thickness=thickness)
 
     return img_l_cv2
