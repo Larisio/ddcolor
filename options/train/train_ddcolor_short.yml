@@ -1,5 +1,5 @@
 # general settings
-name: train_ddcolor_l_run_moder_comic_20k
+name: train_ddcolor_l_run_moder_comic_20k_short
 model_type: ColorModel
 scale: 1
 num_gpu: 2
