@@ -1,5 +1,5 @@
 # general settings
-name: train_ddcolor_l
+name: train_ddcolor_l_run_moder_comic_20k_lowColorEnhancment
 model_type: ColorModel
 scale: 1
 num_gpu: 2
@@ -32,7 +32,7 @@ datasets:
     # outlining
     threshold_replace: 255
     threshold: 175
-    brightness_factor: 1.8
+    brightness_factor: 1.7
     outline_thickness: 1
 
     # data loader
