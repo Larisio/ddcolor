@@ -95,7 +95,7 @@ path:
 
 # training settings
 train:
-  color_enhance: false
+  color_enhance: true
   color_enhance_factor: 1.4
   optim_g:
     type: AdamW
