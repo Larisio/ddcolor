@@ -33,7 +33,7 @@ datasets:
     threshold_replace: 255
     threshold: 175
     brightness_factor: 1.7
-    outline_thickness: 0
+    outline_thickness: 1
 
     # data loader
     use_shuffle: true
@@ -63,7 +63,7 @@ datasets:
     threshold_replace: 255
     threshold: 175
     brightness_factor: 1.7
-    outline_thickness: 0
+    outline_thickness: 1
 
 # network structures
 network_g:
