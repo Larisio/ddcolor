@@ -112,6 +112,9 @@ class LabDataset(data.Dataset):
         # convert to gray
         img_gt = cv2.cvtColor(img_gt, cv2.COLOR_BGR2RGB)
         img_l, img_ab = rgb2lab(img_gt)
+
+        img_ab_copy = img_ab.copy()
+
         img_l = brighten_lab_l(img_l, factor=self.brightness_factor)
         img_l_cv2 = lab_l_to_uint8(img_l)
 
@@ -121,6 +124,8 @@ class LabDataset(data.Dataset):
 
         target_a, target_b = self.ab2int(img_ab)
 
+        img_ab = img_ab_copy.copy()
+        
         # numpy to tensor
         img_l, img_ab = img2tensor([img_l, img_ab], bgr2rgb=False, float32=True)
         target_a, target_b = torch.LongTensor(target_a), torch.LongTensor(target_b)
