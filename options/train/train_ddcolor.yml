@@ -1,5 +1,5 @@
 # general settings
-name: train_ddcolor_l_run_modern_512_20k_noOutline_long
+name: train_ddcolor_l_run_modern_256_8k_long
 model_type: ColorModel
 scale: 1
 num_gpu: 2
@@ -12,11 +12,11 @@ datasets:
     name: ImageNet
     type: LabDataset
     dataroot_gt: /
-    meta_info_file: ['/home/lkmm73/ddcolor/data_list/train.txt']
+    meta_info_file: ['/home/lkmm73/ddcolor/data_list/dataset/train_ddcolor_modern_comic_8k/train.txt']
     io_backend:
       type: disk
 
-    gt_size: 512
+    gt_size: 256
 
     # augmentation config
     ## flip & rotate90
@@ -30,7 +30,7 @@ datasets:
     fmix_p: 0.5
 
     # outlining
-    threshold_replace: 255
+    threshold_replace: 200
     threshold: 175
     brightness_factor: 1.7
     outline_thickness: 0
@@ -48,8 +48,8 @@ datasets:
     type: LabDataset
     # dataroot_gt: path_to_gt
     dataroot_gt: /
-    meta_info_file: '/home/lkmm73/ddcolor/data_list/val.txt'
-    gt_size: 512
+    meta_info_file: '/home/lkmm73/ddcolor/data_list/dataset/train_ddcolor_modern_comic_8k/val.txt'
+    gt_size: 256
     io_backend:
       type: disk
       
@@ -60,7 +60,7 @@ datasets:
     fmix_p: 0.5
 
     # outlining
-    threshold_replace: 255
+    threshold_replace: 200
     threshold: 175
     brightness_factor: 1.7
     outline_thickness: 0
@@ -110,10 +110,10 @@ train:
 
   scheduler:
     type: MultiStepLR
-    milestones: [20000, 40000, 60000, 80000, 100000] # [80000, 120000, 160000, 200000, 240000, 280000, 320000, 360000]
+    milestones: [60000, 80000, 100000, 120000, 160000] # [80000, 120000, 160000, 200000, 240000, 280000, 320000, 360000]
     gamma: 0.5
 
-  total_iter: 120000
+  total_iter: 200000
   warmup_iter: -1  # no warm up
 
   # losses
@@ -169,7 +169,7 @@ logger:
   print_freq: 1000
   save_snapshot_freq: 10000  # !!float 1e4
   save_snapshot_verbose: True
-  save_checkpoint_freq: 30000 # !!float 1e4
+  save_checkpoint_freq: 50000 # !!float 1e4
   use_tb_logger: true
   wandb:
     project: ~
