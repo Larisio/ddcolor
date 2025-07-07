@@ -1,5 +1,5 @@
 # general settings
-name: train_ddcolor_l_run_modern_comic_short_originalProjekt_gt_fix
+name: train_ddcolor_l_run_modern_comic_short_replace190_gt_fix
 model_type: ColorModel
 scale: 1
 num_gpu: 2
