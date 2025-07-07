@@ -122,7 +122,6 @@ class LabDataset(data.Dataset):
         target_a, target_b = self.ab2int(img_ab)
 
         # numpy to tensor
-        _, img_ab = rgb2lab(img_gt)
         img_l, img_ab = img2tensor([img_l, img_ab], bgr2rgb=False, float32=True)
         target_a, target_b = torch.LongTensor(target_a), torch.LongTensor(target_b)
         return_d = {
