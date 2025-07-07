@@ -1,5 +1,5 @@
 # general settings
-name: train_ddcolor_l_run_modern_512_20k_noOutline_long
+name: train_ddcolor_l_run_old_256_10k_noOutline_long
 model_type: ColorModel
 scale: 1
 num_gpu: 2
@@ -30,7 +30,7 @@ datasets:
     fmix_p: 0.5
 
     # outlining
-    threshold_replace: 255
+    threshold_replace: 220
     threshold: 175
     brightness_factor: 1.7
     outline_thickness: 0
@@ -60,7 +60,7 @@ datasets:
     fmix_p: 0.5
 
     # outlining
-    threshold_replace: 255
+    threshold_replace: 220
     threshold: 175
     brightness_factor: 1.7
     outline_thickness: 0
