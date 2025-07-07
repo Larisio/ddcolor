@@ -30,7 +30,7 @@ datasets:
     fmix_p: 0.5
 
     # outlining
-    threshold_replace: 255
+    threshold_replace: 190
     threshold: 175
     brightness_factor: 1.7
     outline_thickness: 0
@@ -60,7 +60,7 @@ datasets:
     fmix_p: 0.5
 
     # outlining
-    threshold_replace: 255
+    threshold_replace: 190
     threshold: 175
     brightness_factor: 1.7
     outline_thickness: 0
