@@ -113,19 +113,16 @@ class LabDataset(data.Dataset):
         img_gt = cv2.cvtColor(img_gt, cv2.COLOR_BGR2RGB)
         img_l, img_ab = rgb2lab(img_gt)
 
-        img_ab_copy = img_ab.copy()
-
+        """
         img_l = brighten_lab_l(img_l, factor=self.brightness_factor)
         img_l_cv2 = lab_l_to_uint8(img_l)
 
         img_l_cv2 = outline_img(img_l_cv2, threshold=self.threshold, threshold_replace=self.threshold_replace, thickness=self.outline_thickness)
 
         img_l = uint8_to_lab_l(img_l_cv2)
-
+        """
         target_a, target_b = self.ab2int(img_ab)
 
-        img_ab = img_ab_copy.copy()
-        
         # numpy to tensor
         img_l, img_ab = img2tensor([img_l, img_ab], bgr2rgb=False, float32=True)
         target_a, target_b = torch.LongTensor(target_a), torch.LongTensor(target_b)
