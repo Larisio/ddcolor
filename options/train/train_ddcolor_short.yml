@@ -1,5 +1,5 @@
 # general settings
-name: train_ddcolor_l_run_modern_comic_short_no_outline
+name: train_ddcolor_l_run_modern_comic_short_no_outline_gt_gix
 model_type: ColorModel
 scale: 1
 num_gpu: 2
