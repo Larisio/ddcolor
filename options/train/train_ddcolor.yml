@@ -1,5 +1,5 @@
 # general settings
-name: train_ddcolor_l_run_modern_256_8k_long
+name: train_ddcolor_l_run_modern_256_8k_200klong
 model_type: ColorModel
 scale: 1
 num_gpu: 2
