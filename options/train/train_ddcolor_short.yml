@@ -12,7 +12,7 @@ datasets:
     name: ImageNet
     type: LabDataset
     dataroot_gt: /
-    meta_info_file: ['/home/lkmm73/ddcolor/data_list/train.txt']
+    meta_info_file: ['/home/lkmm73/ddcolor/data_list/train_old.txt']
     io_backend:
       type: disk
 
@@ -48,7 +48,7 @@ datasets:
     type: LabDataset
     # dataroot_gt: path_to_gt
     dataroot_gt: /
-    meta_info_file: '/home/lkmm73/ddcolor/data_list/val.txt'
+    meta_info_file: '/home/lkmm73/ddcolor/data_list/val_old.txt'
     gt_size: 256
     io_backend:
       type: disk
