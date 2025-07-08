@@ -1,1 +1,1 @@
-python export.py --model_path I:/dataset/runs/train_ddcolor_l_run_modern_comic_8k/models/net_g_latest.pth --export_path I:/Lars/Projekt/GitHub/ddcolor/notebooks/exports/train_ddcolor_l_run_modern_comic_8k.onnx --model_size large
+python export.py --model_path I:/dataset/runs/train_ddcolor_l_run_old_256_10k_200klong/models/net_g_latest.pth --export_path I:/Lars/Projekt/GitHub/ddcolor/notebooks/exports/train_ddcolor_l_run_old_256_10k_200klong.onnx --model_size large
