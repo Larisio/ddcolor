@@ -1,1 +1,1 @@
-CUDA_VISIBLE_DEVICES=1 torchrun --nproc_per_node=1 --master_port=3725 /home/lkmm73/ddcolor/basicsr/train.py -opt  /home/lkmm73/ddcolor/options/train/train_ddcolor_old.yml --auto_resume --launcher pytorch
+CUDA_VISIBLE_DEVICES=0 torchrun --nproc_per_node=1 --master_port=3725 /home/lkmm73/ddcolor/basicsr/train.py -opt  /home/lkmm73/ddcolor/options/train/train_ddcolor_old.yml --auto_resume --launcher pytorch
