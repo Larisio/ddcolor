@@ -1,5 +1,5 @@
 # general settings
-name: train_ddcolor_l_run_old_256_10k_long
+name: train_ddcolor_l_run_old_256_10k_sq4_200klong
 model_type: ColorModel
 scale: 1
 num_gpu: 2
@@ -12,7 +12,7 @@ datasets:
     name: ImageNet
     type: LabDataset
     dataroot_gt: /
-    meta_info_file: ['/home/lkmm73/ddcolor/data_list/train_old.txt']
+    meta_info_file: ['/home/lkmm73/ddcolor/data_list/dataset/train_ddcolor_old_512_sq4_cut_18k/train.txt']
     io_backend:
       type: disk
 
@@ -48,7 +48,7 @@ datasets:
     type: LabDataset
     # dataroot_gt: path_to_gt
     dataroot_gt: /
-    meta_info_file: '/home/lkmm73/ddcolor/data_list/val_old.txt'
+    meta_info_file: '/home/lkmm73/ddcolor/data_list/dataset/train_ddcolor_old_512_sq4_cut_18k/val.txt'
     gt_size: 256
     io_backend:
       type: disk
