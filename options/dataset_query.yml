@@ -1,7 +1,8 @@
 # general settings
-name: train_ddcolor_old_512_cut_10k
+name: train_ddcolor_old_512_sq4_cut_1k
 pull_paths: ['I:\dataset\raw_panel_images_64'] # ['I:\dataset\images.tar.gz\images', 'I:\dataset\raw_panel_images_64']
 img_types: ['jpg', 'jpeg', 'png']
+
 
 deep_pull: true
 max_images: 10000
@@ -9,16 +10,23 @@ split_ratio: 0.8
 print_steps: 100
 
 store_path: I:/dataset/
-txt_path_prefix: '/home/lkmm73/ddcolor/data_list/dataset/'
+txt_path_prefix: '/home/lkmm73/ddcolor/data_list/dataset/train_ddcolor_old_512_sq8_cut_1k/'
 
 image:
+  grid_square: false
+  grid_square_size: 4
+  grid_height: 4
+  grid_width: 4
+  grid_resize_horizontal: 512
+  grid_resize_vertical: 512
+
   filter:
     max_img_size: 4000
-    min_img_size: 300
+    min_img_size: 150
     max_black_percentage: 0.4
     black_threshold: 60
-    max_white_percentage: 0.4
-    white_threshold: 190
+    max_white_percentage: 0.3
+    white_threshold: 200
 
   horizontal_cut: true
   horizontal_cut_size: 512
@@ -29,6 +37,8 @@ image:
   vertical_cut_direction: bottom #top, bottom, both
 
   resize: true
-  resize_until: 512
+  resize_horizontal: 512
+  resize_vertical: 512
+  
 
 

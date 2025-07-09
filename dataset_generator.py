@@ -2,6 +2,7 @@ import yaml
 import glob
 import cv2
 import os
+import math
 import numpy as np
 
 
@@ -166,15 +167,15 @@ def cut_image_to_size(
 
     return image
 
-def resize_image(img, resize=True, resize_until=512):
+def resize_image(img, resize=True, resize_horizontal=512, resize_vertical=512):
     """
-    Resizes the image proportionally so that neither width nor height
-    exceeds `squeeze_until`.
+    Resizes the image to the specified width and height if resizing is enabled.
 
     Args:
         img (numpy.ndarray): The input image.
-        squeeze (bool): Whether to apply resizing.
-        squeeze_until (int): Max allowed width or height.
+        resize (bool): Whether to apply resizing.
+        resize_horizontal (int): Target width.
+        resize_vertical (int): Target height.
 
     Returns:
         numpy.ndarray: Resized image if needed, otherwise original.
@@ -182,16 +183,41 @@ def resize_image(img, resize=True, resize_until=512):
     if not resize:
         return img
 
-    h, w = img.shape[:2]
-
-    # Only resize if any dimension exceeds the limit
-    if w > resize_until or h > resize_until:
-        scale = min(resize_until / w, resize_until / h)
-        new_w = int(w * scale)
-        new_h = int(h * scale)
-        img = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_AREA)
-
+    # Resize image to target dimensions
+    img = cv2.resize(img, (resize_horizontal, resize_vertical), interpolation=cv2.INTER_AREA)
     return img
+    return img
+
+def combine_to_grid(images, grid_size):
+    if len(images) == 0:
+        raise ValueError("Image list is empty.")
+    if grid_size != len(images):
+        raise ValueError("grid_size must match number of images.")
+
+    # Determine grid shape (rows x cols)
+    grid_rows = int(math.floor(math.sqrt(grid_size)))
+    grid_cols = int(math.ceil(grid_size / grid_rows))
+
+    # Get image shape
+    img_h, img_w = images[0].shape[:2]
+    channels = images[0].shape[2] if images[0].ndim == 3 else 1
+
+    # Pad with black images if necessary
+    num_missing = grid_rows * grid_cols - grid_size
+    if num_missing > 0:
+        pad_img = np.zeros_like(images[0])
+        images += [pad_img] * num_missing
+
+    # Combine images
+    rows = []
+    for i in range(grid_rows):
+        row_imgs = images[i * grid_cols:(i + 1) * grid_cols]
+        row = np.hstack(row_imgs)
+        rows.append(row)
+
+    grid_image = np.vstack(rows)
+    return grid_image
+
 
 def load_and_store_images(
         path_list,
@@ -200,7 +226,7 @@ def load_and_store_images(
         txt_path_prefix,
         print_steps,
 
-        #filter
+        # Filter
         max_img_size,
         min_img_size,
         max_black_percentage,
@@ -208,44 +234,39 @@ def load_and_store_images(
         max_white_percentage,
         white_threshold,
 
-        #cut
+        # Cut
         horizontal_cut,
         horizontal_cut_size,
         horizontal_cut_direction,
         vertical_cut,
         vertical_cut_size,
         vertical_cut_direction,
-        #squezze
+
+        # Resize
         resize,
-        resize_until,
+        resize_horizontal=512,
+        resize_vertical=512,
+
+        # Grid
+        grid_square=False,
+        grid_square_size=4,
+        grid_resize_horizontal=512,
+        grid_resize_vertical=512,
 
         prefix='img_',
         verbose=True):
-    """
-    Loads images from the provided path list and stores them in the specified output directory.
 
-    Args:
-        path_list (list of str): List of image file paths.
-        output_dir (str): Directory where images should be saved.
-        rename (bool): Whether to rename images (True) or keep original names (False).
-        prefix (str): Prefix to use for renamed images.
-        verbose (bool): Whether to print loading/saving status.
-
-    Returns:
-        saved_paths (list of str): List of paths to the saved images.
-    """
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
     txt_paths = []
     touched_paths = []
-    img_counter = 1
-    for idx, path in enumerate(path_list):
-        if img_counter > max_images:
-            break
+    group_buffer = []
+    grid_counter = 0
 
-        image_name = os.path.basename(path)
-        image_name = os.path.splitext(image_name)[0]
+    for idx, path in enumerate(path_list):
+        if grid_counter >= max_images:
+            break
 
         img = cv2.imread(path)
         if img is None:
@@ -253,13 +274,13 @@ def load_and_store_images(
                 print(f"[Warning] Failed to load: {path}")
             continue
 
-        # Filter
+        # Size filter
         if filter_img_size(img, min_img_size, max_img_size):
             if verbose:
-                print(f"[Warning] Skipping image due to size: {path}")
+                print(f"[Skip] Image size not in range: {path}")
             continue
-        
-        # Cutting
+
+        # Crop and resize
         img = cut_image_to_size(
             img,
             horizontal_cut=horizontal_cut,
@@ -269,42 +290,125 @@ def load_and_store_images(
             vertical_cut_size=vertical_cut_size,
             vertical_cut_direction=vertical_cut_direction
         )
-        # Squeezing
-        img = resize_image(img, resize=resize, resize_until=resize_until)
 
-        # Brightness filter
-        brightness_check = filter_img_brightness(img, max_black_percentage, black_threshold, max_white_percentage, white_threshold)
-        if  brightness_check != 0:
+        img = resize_image(
+            img,
+            resize=resize,
+            resize_horizontal=resize_horizontal,
+            resize_vertical=resize_vertical
+        )
+
+        # Check if image has valid size
+        h, w = img.shape[:2]
+        if h == 0 or w == 0:
             if verbose:
-                if brightness_check == -1:
-                    print(f"[Warning] Skipping image to dark: {path}")
-                elif brightness_check == 1:
-                    print(f"[Warning] Skipping image to brightness: {path}")
+                print(f"[Skip] Image became invalid after cropping: {path}")
             continue
 
-        new_filename = f"{prefix}_{img_counter:04d}_{image_name}.jpg"
-        save_path = os.path.join(output_dir, new_filename)
-        txt_path = os.path.join(txt_path_prefix, new_filename)
+        # Brightness filter
+        brightness_check = filter_img_brightness(
+            img,
+            max_black_percentage,
+            black_threshold,
+            max_white_percentage,
+            white_threshold
+        )
 
-        cv2.imwrite(save_path, img)
-        txt_paths.append(txt_path)
+        if brightness_check != 0:
+            if verbose:
+                reason = "too dark" if brightness_check == -1 else "too bright"
+                print(f"[Skip] Image {reason}: {path}")
+            continue
+
+        # Add to buffer
+        group_buffer.append(img)
         touched_paths.append(path)
-        img_counter += 1
 
         if verbose:
-            if idx % 100 == 0:
-                print(f"----------------------------------------------------------------------------------")
-                print(f"[Path left: {len(path_list) - idx}][idx: {idx}][path_list: {len(path_list)}] ")
-                print(f"----------------------------------------------------------------------------------")
+            print(f"[ADD] Image added to buffer: {path} (Buffer size: {len(group_buffer)}/{grid_square_size})")
 
+        # Build and save grid when full
+        if len(group_buffer) == grid_square_size:
+            # Filter out invalid images before combining
+            valid_images = [img for img in group_buffer if img.shape[0] > 0 and img.shape[1] > 0]
+            
+            if len(valid_images) != grid_square_size:
+                if verbose:
+                    print(f"[Skip] Invalid image(s) in group. Expected {grid_square_size}, got {len(valid_images)} valid.")
+                group_buffer = []  # Clear and move on
+                continue
+            grid_img = combine_to_grid(group_buffer, grid_square_size)
+            grid_img = resize_image(grid_img, True, grid_resize_horizontal, grid_resize_vertical)
+
+            brightness_check = filter_img_brightness(
+                grid_img,
+                max_black_percentage,
+                black_threshold,
+                max_white_percentage,
+                white_threshold
+            )
+
+            if brightness_check == 0:
+                new_filename = f"{prefix}_group_{grid_counter:04d}.jpg"
+                save_path = os.path.join(output_dir, new_filename)
+                txt_path = os.path.join(txt_path_prefix, new_filename)
+
+                cv2.imwrite(save_path, grid_img)
+                grid_counter += 1
+                txt_paths.append(txt_path)
+
+                if verbose:
+                    print(f"[OK] Saved grid image: {save_path}")
+            else:
+                if verbose:
+                    reason = "GRID too dark" if brightness_check == -1 else "GRID too bright"
+                    print(f"[Skip] {reason}: group {grid_counter}")
+                continue
+
+            group_buffer = []
+
+        if verbose and idx % print_steps == 0:
+            print(f"[Progress] Processed {idx+1}/{len(path_list)}")
+
+    # Handle leftover images
+    if grid_square and len(group_buffer) > 0:
         if verbose:
-            print(f"[OK][{img_counter}] Saved: {save_path}")
-        
-        
+            print(f"[FINAL] Saving incomplete group of {len(group_buffer)} images")
+
+        grid_img = combine_to_grid(group_buffer, grid_square_size)
+        grid_img = resize_image(grid_img, True, grid_resize_horizontal, grid_resize_vertical)
+
+        brightness_check = filter_img_brightness(
+            grid_img,
+            max_black_percentage,
+            black_threshold,
+            max_white_percentage,
+            white_threshold
+        )
+
+        if brightness_check == 0:
+            new_filename = f"{prefix}_group_{grid_counter:04d}.jpg"
+            save_path = os.path.join(output_dir, new_filename)
+            txt_path = os.path.join(txt_path_prefix, new_filename)
+
+            cv2.imwrite(save_path, grid_img)
+            txt_paths.append(txt_path)
+
+            if verbose:
+                print(f"[OK] Saved final (partial) grid image: {save_path}")
+        else:
+            if verbose:
+                reason = "FINAL grid too dark" if brightness_check == -1 else "FINAL grid too bright"
+                print(f"[Skip] {reason}: final group")
+
+    # Cleanup used paths
     for path in touched_paths:
-        path_list.remove(path)
+        if path in path_list:
+            path_list.remove(path)
 
     return txt_paths
+
+
 
 
 
@@ -342,24 +446,37 @@ if __name__ == '__main__':
             train_path,
             max_train_images,
             os.path.join(txt_path_prefix, 'train/'),
-            opt['print_steps'],
-            #filter
-            filter_opt['max_img_size'],
-            filter_opt['min_img_size'],
-            filter_opt['max_black_percentage'],
-            filter_opt['black_threshold'],
-            filter_opt['max_white_percentage'],
-            filter_opt['white_threshold'],
-            #cut    
-            image_opt['horizontal_cut'],
-            image_opt['horizontal_cut_size'],
-            image_opt['horizontal_cut_direction'],
-            image_opt['vertical_cut'],
-            image_opt['vertical_cut_size'],
-            image_opt['vertical_cut_direction'],
-            #squezze
-            image_opt['resize'],
-            image_opt['resize_until'],
+            # General options
+            print_steps=opt['print_steps'],
+
+            # Filter options
+            max_img_size=filter_opt['max_img_size'],
+            min_img_size=filter_opt['min_img_size'],
+            max_black_percentage=filter_opt['max_black_percentage'],
+            black_threshold=filter_opt['black_threshold'],
+            max_white_percentage=filter_opt['max_white_percentage'],
+            white_threshold=filter_opt['white_threshold'],
+
+            # Cut options
+            horizontal_cut=image_opt['horizontal_cut'],
+            horizontal_cut_size=image_opt['horizontal_cut_size'],
+            horizontal_cut_direction=image_opt['horizontal_cut_direction'],
+            vertical_cut=image_opt['vertical_cut'],
+            vertical_cut_size=image_opt['vertical_cut_size'],
+            vertical_cut_direction=image_opt['vertical_cut_direction'],
+
+            # Squeeze (resize) options
+            resize=image_opt['resize'],
+            resize_horizontal=image_opt['resize_horizontal'],
+            resize_vertical=image_opt['resize_vertical'],
+
+            # Grid options
+            grid_square=image_opt['grid_square'],
+            grid_square_size=image_opt['grid_square_size'],
+            grid_resize_horizontal=image_opt['grid_resize_horizontal'],
+            grid_resize_vertical=image_opt['grid_resize_vertical'],
+
+            #prefix
             prefix='train_',
             verbose=True
             )
@@ -374,24 +491,36 @@ if __name__ == '__main__':
             val_path,
             max_val_images,
             os.path.join(txt_path_prefix, 'val/'),
-            opt['print_steps'],
-            #filter
-            filter_opt['max_img_size'],
-            filter_opt['min_img_size'],
-            filter_opt['max_black_percentage'],
-            filter_opt['black_threshold'],
-            filter_opt['max_white_percentage'],
-            filter_opt['white_threshold'],
-            #cut    
-            image_opt['horizontal_cut'],
-            image_opt['horizontal_cut_size'],
-            image_opt['horizontal_cut_direction'],
-            image_opt['vertical_cut'],
-            image_opt['vertical_cut_size'],
-            image_opt['vertical_cut_direction'],
-            #squezze
-            image_opt['resize'],
-            image_opt['resize_until'],
+            # General options
+            print_steps=opt['print_steps'],
+
+            # Filter options
+            max_img_size=filter_opt['max_img_size'],
+            min_img_size=filter_opt['min_img_size'],
+            max_black_percentage=filter_opt['max_black_percentage'],
+            black_threshold=filter_opt['black_threshold'],
+            max_white_percentage=filter_opt['max_white_percentage'],
+            white_threshold=filter_opt['white_threshold'],
+
+            # Cut options
+            horizontal_cut=image_opt['horizontal_cut'],
+            horizontal_cut_size=image_opt['horizontal_cut_size'],
+            horizontal_cut_direction=image_opt['horizontal_cut_direction'],
+            vertical_cut=image_opt['vertical_cut'],
+            vertical_cut_size=image_opt['vertical_cut_size'],
+            vertical_cut_direction=image_opt['vertical_cut_direction'],
+
+            # Squeeze (resize) options
+            resize=image_opt['resize'],
+            resize_horizontal=image_opt['resize_horizontal'],
+            resize_vertical=image_opt['resize_vertical'],
+
+            # Grid options
+            grid_square=image_opt['grid_square'],
+            grid_square_size=image_opt['grid_square_size'],
+            grid_resize_horizontal=image_opt['grid_resize_horizontal'],
+            grid_resize_vertical=image_opt['grid_resize_vertical'],
+            #prefix
             prefix='val_',
             verbose=True
         )
