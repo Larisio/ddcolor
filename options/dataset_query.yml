@@ -1,11 +1,11 @@
 # general settings
-name: train_ddcolor_old_512_sq4_cut_1k
+name: train_ddcolor_old_512_sq4_cut_18k
 pull_paths: ['I:\dataset\raw_panel_images_64'] # ['I:\dataset\images.tar.gz\images', 'I:\dataset\raw_panel_images_64']
 img_types: ['jpg', 'jpeg', 'png']
 
 
 deep_pull: true
-max_images: 10000
+max_images: 12500
 split_ratio: 0.8
 print_steps: 100
 
