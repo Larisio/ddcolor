@@ -27,6 +27,7 @@ version.py
 *.pth
 *.zip
 *.npy
+*.pdf
 
 # template
 
